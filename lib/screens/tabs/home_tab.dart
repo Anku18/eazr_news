@@ -1,8 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eazr_news/constants/constants.dart';
+import 'package:eazr_news/controllers/top_headline_controller.dart';
+import 'package:eazr_news/screens/article_detail_screen.dart';
+import 'package:eazr_news/screens/view_all_top_headlines_screen.dart';
 import 'package:eazr_news/widgets/category_type_card.dart';
 import 'package:eazr_news/widgets/top_headline_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeTab extends StatefulWidget {
@@ -13,7 +17,15 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  final topHeadlineController = Get.put(TopHeadlineController());
   int activeIndex = 1;
+
+  @override
+  void initState() {
+    topHeadlineController.fetchNews();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,17 +36,19 @@ class _HomeTabState extends State<HomeTab> {
             children: [
               TextSpan(
                 text: 'Eazr',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: MediaQuery.of(context).platformBrightness ==
+                            Brightness.light
+                        ? Colors.black
+                        : Colors.white),
               ),
               TextSpan(
                 text: 'News',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).primaryColor),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: MediaQuery.of(context).platformBrightness ==
+                            Brightness.light
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).colorScheme.secondary),
               ),
             ],
           ),
@@ -73,26 +87,48 @@ class _HomeTabState extends State<HomeTab> {
                       .copyWith(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ViewAllTopHeadlinesScreen(),
+                      ),
+                    );
+                  },
                   child: const Text('View All'),
                 ),
               ],
             ),
-            CarouselSlider.builder(
-              itemCount: 5,
-              itemBuilder: (context, index, _) => const TopHeadlineCard(),
-              options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height / 4.5,
-                  initialPage: 1,
-                  onPageChanged: (index, _) {
-                    setState(() {
-                      activeIndex = index;
-                    });
+            Obx(
+              () => CarouselSlider.builder(
+                itemCount: topHeadlineController.topHeadlineList.length,
+                itemBuilder: (context, index, _) => InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ArticleDetailScreen(
+                                article: topHeadlineController.topHeadlineList
+                                    .elementAt(index))));
                   },
-                  autoPlay: true,
-                  enableInfiniteScroll: false,
-                  enlargeStrategy: CenterPageEnlargeStrategy.height,
-                  enlargeCenterPage: true),
+                  child: TopHeadlineCard(
+                    article:
+                        topHeadlineController.topHeadlineList.elementAt(index),
+                  ),
+                ),
+                options: CarouselOptions(
+                    height: MediaQuery.of(context).size.height / 4.5,
+                    initialPage: 1,
+                    onPageChanged: (index, _) {
+                      setState(() {
+                        activeIndex = index;
+                      });
+                    },
+                    autoPlay: true,
+                    enableInfiniteScroll: false,
+                    enlargeStrategy: CenterPageEnlargeStrategy.height,
+                    enlargeCenterPage: true),
+              ),
             ),
             const SizedBox(
               height: 10,

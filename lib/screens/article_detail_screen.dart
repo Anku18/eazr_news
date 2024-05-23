@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eazr_news/models/article_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ArticleDetailScreen extends StatefulWidget {
   final ArticleModel article;
@@ -14,6 +16,16 @@ class ArticleDetailScreen extends StatefulWidget {
 }
 
 class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
+  String? formattedDate;
+
+  @override
+  void initState() {
+    DateTime originalDate =
+        DateTime.parse(widget.article.publishedAt.toString());
+    formattedDate = DateFormat('d MMMM y', 'en_US').format(originalDate);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,24 +48,43 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text('BBC News'),
+                Text(
+                  widget.article.source?.name.toString().capitalizeFirst ??
+                      'Unknown',
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.grey),
+                ),
                 const SizedBox(
                   width: 5,
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 2,
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Colors.grey,
                 ),
                 const SizedBox(
                   width: 5,
                 ),
-                const Text('11 MAY 2024')
+                Text(
+                  formattedDate ?? '',
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.grey),
+                )
               ],
             ),
             const SizedBox(
               height: 10,
             ),
-            const Text('Title'),
+            Text(
+              widget.article.title ?? '',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.w700),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -95,11 +126,23 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
             const SizedBox(
               height: 10,
             ),
-            const Text('Desc'),
+            Text(
+              widget.article.description ?? '',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontWeight: FontWeight.w600, color: Colors.grey),
+            ),
             const SizedBox(
               height: 10,
             ),
-            const Text('Content'),
+            Text(
+              widget.article.content ?? '',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontWeight: FontWeight.w600, color: Colors.grey),
+            ),
           ],
         ),
       ),

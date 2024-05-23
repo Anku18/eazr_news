@@ -1,35 +1,37 @@
-import 'package:eazr_news/controllers/category_controller.dart';
+import 'package:eazr_news/controllers/top_headline_controller.dart';
 import 'package:eazr_news/screens/article_detail_screen.dart';
 import 'package:eazr_news/widgets/article_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CategoryScreen extends StatefulWidget {
-  final String category;
-  const CategoryScreen({super.key, required this.category});
+class ViewAllTopHeadlinesScreen extends StatefulWidget {
+  const ViewAllTopHeadlinesScreen({
+    super.key,
+  });
 
   @override
-  _CategoryScreenState createState() => _CategoryScreenState();
+  _ViewAllTopHeadlinesScreenState createState() =>
+      _ViewAllTopHeadlinesScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
-  final CategoryController categoryController = Get.put(CategoryController());
+class _ViewAllTopHeadlinesScreenState extends State<ViewAllTopHeadlinesScreen> {
+  final TopHeadlineController topHeadlineController =
+      Get.put(TopHeadlineController());
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    categoryController.fetchNewsByCategory(category: widget.category);
+    topHeadlineController.fetchTopHeadlines();
     _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent &&
-        !categoryController.hasReachedMax.value &&
-        !categoryController.isFetchingMore.value) {
-      categoryController.fetchNewsByCategory(
-          isLoadMore: true, category: widget.category);
+        !topHeadlineController.hasReachedMax.value &&
+        !topHeadlineController.isFetchingMore.value) {
+      topHeadlineController.fetchTopHeadlines();
     }
   }
 
@@ -37,12 +39,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
-    Get.delete<CategoryController>();
+    Get.delete<TopHeadlineController>();
     super.dispose();
   }
 
   Future<void> _refreshNews() async {
-    await categoryController.fetchNewsByCategory(category: widget.category);
+    await topHeadlineController.fetchTopHeadlines();
   }
 
   @override
@@ -50,7 +52,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.category.capitalizeFirst.toString(),
+          'Top Headlines',
           style: Theme.of(context)
               .textTheme
               .titleLarge!
@@ -58,9 +60,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
       ),
       body: Obx(() {
-        if (categoryController.isLoading.value) {
+        if (topHeadlineController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
-        } else if (categoryController.articles.isEmpty) {
+        } else if (topHeadlineController.viewAllTopHeadlines.isEmpty) {
           return const Center(child: Text('No news available'));
         } else {
           return RefreshIndicator(
@@ -72,14 +74,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
               separatorBuilder: (context, index) => const SizedBox(
                 height: 16,
               ),
-              itemCount: categoryController.hasReachedMax.value
-                  ? categoryController.articles.length
-                  : categoryController.articles.length + 1,
+              itemCount: topHeadlineController.hasReachedMax.value
+                  ? topHeadlineController.viewAllTopHeadlines.length
+                  : topHeadlineController.viewAllTopHeadlines.length + 1,
               itemBuilder: (context, index) {
-                if (index >= categoryController.articles.length) {
+                if (index >= topHeadlineController.viewAllTopHeadlines.length) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                final article = categoryController.articles[index];
+                final article =
+                    topHeadlineController.viewAllTopHeadlines[index];
                 return InkWell(
                     onTap: () {
                       Navigator.push(

@@ -1,6 +1,6 @@
 import 'package:eazr_news/screens/tabs/explore_tab.dart';
 import 'package:eazr_news/screens/tabs/home_tab.dart';
-import 'package:eazr_news/screens/tabs/saved_article_tab.dart';
+import 'package:eazr_news/screens/tabs/bookmark_tab.dart';
 import 'package:eazr_news/screens/tabs/setting_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: const [
           HomeTab(),
           ExploreTab(),
-          SavedArticleTab(),
+          BookmarkTab(),
           SettingTab(),
         ],
       ),

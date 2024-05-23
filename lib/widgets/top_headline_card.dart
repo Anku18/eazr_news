@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eazr_news/models/article_model.dart';
 import 'package:flutter/material.dart';
 
 class TopHeadlineCard extends StatelessWidget {
+  final ArticleModel article;
   const TopHeadlineCard({
     super.key,
+    required this.article,
   });
 
   @override
@@ -13,27 +16,29 @@ class TopHeadlineCard extends StatelessWidget {
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
       child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-              imageUrl:
-                  'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-              height: MediaQuery.of(context).size.height / 4.5,
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.fill,
-              placeholder: (context, url) => Center(
-                  child: CircularProgressIndicator(
-                color: Theme.of(context).primaryColor,
-              )),
-              errorWidget: (context, url, error) => Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey.withOpacity(0.2)),
-                child: Image.asset(
-                  'assets/images/error_image.webp',
-                  height: MediaQuery.of(context).size.height / 4.5,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.fill,
+          Hero(
+            tag: article.title.toString(),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: article.urlToImage.toString(),
+                height: MediaQuery.of(context).size.height / 4.5,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.fill,
+                placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                )),
+                errorWidget: (context, url, error) => Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.withOpacity(0.2)),
+                  child: Image.asset(
+                    'assets/images/error_image.webp',
+                    height: MediaQuery.of(context).size.height / 4.5,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
@@ -48,7 +53,7 @@ class TopHeadlineCard extends StatelessWidget {
                     bottomRight: Radius.circular(12))),
             padding: const EdgeInsets.all(6),
             child: Text(
-              'Title',
+              article.title ?? '',
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
