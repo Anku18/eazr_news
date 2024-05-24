@@ -1,6 +1,7 @@
 import 'package:eazr_news/controllers/category_controller.dart';
 import 'package:eazr_news/screens/article_detail_screen.dart';
 import 'package:eazr_news/widgets/article_card.dart';
+import 'package:eazr_news/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,15 +49,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.category.capitalizeFirst.toString(),
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(color: Colors.black),
-        ),
-      ),
+      appBar: CustomAppBar(
+        title: widget.category.capitalizeFirst.toString(),
+      ).getAppBar(),
       body: Obx(() {
         if (categoryController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

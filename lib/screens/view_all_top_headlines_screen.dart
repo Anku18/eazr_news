@@ -1,6 +1,7 @@
 import 'package:eazr_news/controllers/top_headline_controller.dart';
 import 'package:eazr_news/screens/article_detail_screen.dart';
 import 'package:eazr_news/widgets/article_card.dart';
+import 'package:eazr_news/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,15 +51,7 @@ class _ViewAllTopHeadlinesScreenState extends State<ViewAllTopHeadlinesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Top Headlines',
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(color: Colors.black),
-        ),
-      ),
+      appBar: const CustomAppBar(title: 'Top Headlines').getAppBar(),
       body: Obx(() {
         if (topHeadlineController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

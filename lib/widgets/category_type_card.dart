@@ -21,8 +21,18 @@ class CategoryTypeCard extends StatelessWidget {
           ),
         );
       },
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 1,
+                offset: const Offset(0, 1.5),
+              ),
+            ]),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6.0),
           child: Row(
@@ -35,9 +45,10 @@ class CategoryTypeCard extends StatelessWidget {
                     .titleMedium!
                     .copyWith(fontSize: 16, fontWeight: FontWeight.w400),
               ),
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 12,
-                child: Center(
+                backgroundColor: Theme.of(context).primaryColor,
+                child: const Center(
                   child: Icon(
                     Icons.arrow_forward_ios_outlined,
                     size: 14,

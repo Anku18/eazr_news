@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eazr_news/controllers/bookmark_controller.dart';
 import 'package:eazr_news/models/article_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class ArticleDetailScreen extends StatefulWidget {
 class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
   String? formattedDate;
 
+  final bookmarkController = Get.find<BookmarkController>();
   @override
   void initState() {
     DateTime originalDate =
@@ -29,17 +31,41 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.bookmark_border,
-              size: 28,
+      appBar: AppBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Obx(() => InkWell(
+            onTap: () {
+              if (bookmarkController.isBookmarked(widget.article)) {
+                bookmarkController.removeBookmark(widget.article);
+              } else {
+                bookmarkController.addBookmark(widget.article);
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 4,
+                      offset: const Offset(0, 1.5),
+                    ),
+                  ]),
+              child: bookmarkController.isBookmarked(widget.article)
+                  ? Icon(
+                      Icons.bookmark,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    )
+                  : const Icon(
+                      Icons.bookmark_border_outlined,
+                      size: 30,
+                    ),
             ),
-          ),
-        ],
-      ),
+          )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

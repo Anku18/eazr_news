@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eazr_news/constants/constants.dart';
+import 'package:eazr_news/controllers/bookmark_controller.dart';
 import 'package:eazr_news/controllers/top_headline_controller.dart';
 import 'package:eazr_news/screens/article_detail_screen.dart';
 import 'package:eazr_news/screens/view_all_top_headlines_screen.dart';
 import 'package:eazr_news/widgets/category_type_card.dart';
+import 'package:eazr_news/widgets/custom_app_bar.dart';
 import 'package:eazr_news/widgets/top_headline_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,10 +20,12 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   final topHeadlineController = Get.put(TopHeadlineController());
-  int activeIndex = 1;
+  final bookmarkController = Get.put(BookmarkController());
+  int activeIndex = 0;
 
   @override
   void initState() {
+    bookmarkController.getBookmark();
     topHeadlineController.fetchNews();
     super.initState();
   }
@@ -29,48 +33,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Eazr',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: MediaQuery.of(context).platformBrightness ==
-                            Brightness.light
-                        ? Colors.black
-                        : Colors.white),
-              ),
-              TextSpan(
-                text: 'News',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: MediaQuery.of(context).platformBrightness ==
-                            Brightness.light
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).colorScheme.secondary),
-              ),
-            ],
-          ),
-        ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: Image.asset(
-        //       'assets/images/search_icon.png',
-        //       color: Colors.black,
-        //       width: 22,
-        //     ),
-        //   ),
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: const Icon(
-        //       Icons.bookmark_outline,
-        //       size: 26,
-        //     ),
-        //   ),
-        // ],
-      ),
+      appBar: const CustomAppBar(title: 'EazrNews').getAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: Column(
@@ -95,7 +58,9 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     );
                   },
-                  child: const Text('View All'),
+                  child: const Text(
+                    'View All',
+                  ),
                 ),
               ],
             ),
@@ -118,7 +83,7 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 options: CarouselOptions(
                     height: MediaQuery.of(context).size.height / 4.5,
-                    initialPage: 1,
+                    initialPage: activeIndex,
                     onPageChanged: (index, _) {
                       setState(() {
                         activeIndex = index;
@@ -159,7 +124,7 @@ class _HomeTabState extends State<HomeTab> {
             GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 10.0,
+                mainAxisSpacing: 5.0,
                 crossAxisSpacing: 10.0,
                 childAspectRatio: 2,
               ),

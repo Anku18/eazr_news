@@ -1,6 +1,7 @@
 import 'package:eazr_news/controllers/explore_controller.dart';
 import 'package:eazr_news/screens/article_detail_screen.dart';
 import 'package:eazr_news/widgets/article_card.dart';
+import 'package:eazr_news/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,16 +43,8 @@ class _ExploreTabState extends State<ExploreTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Search',
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color:
-                  MediaQuery.of(context).platformBrightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white),
-        ),
+      appBar: CustomAppBar(
+        title: 'Search',
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(70.0),
             child: Container(
@@ -96,7 +89,7 @@ class _ExploreTabState extends State<ExploreTab> {
                 ),
               ),
             )),
-      ),
+      ).getAppBar(),
       body: Obx(() {
         if (exploreController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

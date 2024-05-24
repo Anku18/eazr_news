@@ -1,6 +1,6 @@
+import 'package:eazr_news/screens/tabs/bookmark_tab.dart';
 import 'package:eazr_news/screens/tabs/explore_tab.dart';
 import 'package:eazr_news/screens/tabs/home_tab.dart';
-import 'package:eazr_news/screens/tabs/bookmark_tab.dart';
 import 'package:eazr_news/screens/tabs/setting_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         elevation: 2,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -63,10 +64,21 @@ class _HomeScreenState extends State<HomeScreen> {
             gap: 8,
             padding: const EdgeInsets.all(10),
             tabs: const [
-              GButton(icon: Icons.home, text: 'Home'),
-              GButton(icon: Icons.search, text: 'Search'),
-              GButton(icon: Icons.bookmark_border_outlined, text: 'Saved'),
-              GButton(icon: Icons.settings, text: 'Setting')
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+                iconColor: Colors.black,
+              ),
+              GButton(
+                  icon: Icons.search, iconColor: Colors.black, text: 'Search'),
+              GButton(
+                  icon: Icons.bookmark_border_outlined,
+                  iconColor: Colors.black,
+                  text: 'Bookmarks'),
+              GButton(
+                  icon: Icons.settings,
+                  iconColor: Colors.black,
+                  text: 'Setting'),
             ],
           ),
         ),
