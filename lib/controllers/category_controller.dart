@@ -23,13 +23,16 @@ class CategoryController extends GetxController {
         isLoading(true);
       }
 
-      final response = await dio.get(baseUrl, queryParameters: {
-        "apiKey": newsApiKey,
-        "country": 'in',
-        "category": category,
-        "page": currentPage,
-        "pageSize": 10,
-      });
+      final response = await dio.get(baseUrl,
+          options: Options(headers: {
+            "X-Api-Key": newsApiKey,
+          }),
+          queryParameters: {
+            "country": 'in',
+            "category": category,
+            "page": currentPage,
+            "pageSize": 10,
+          });
 
       if (response.statusCode == 200) {
         final List<dynamic> fetchedArticlesJson = response.data['articles'];
@@ -47,10 +50,12 @@ class CategoryController extends GetxController {
           hasReachedMax(fetchedArticles.length < 10);
         }
       } else {
-        Get.snackbar('Error', 'Failed to load news');
+        Get.snackbar('Error', 'Failed to load news',
+            snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load news: $e');
+      Get.snackbar('Error', 'Failed to load news: $e',
+          snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading(false);
       isFetchingMore(false);

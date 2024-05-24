@@ -23,11 +23,14 @@ class ExploreController extends GetxController {
         isLoading(true);
       }
 
-      var response = await dio.get(baseUrlForSearch, queryParameters: {
-        "apiKey": newsApiKey,
-        "q": keyword,
-        "pageSize": 50,
-      });
+      var response = await dio.get(baseUrlForSearch,
+          options: Options(headers: {
+            "X-Api-Key": newsApiKey,
+          }),
+          queryParameters: {
+            "q": keyword,
+            "pageSize": 50,
+          });
 
       if (response.statusCode == 200) {
         final List<dynamic> fetchedArticlesJson = response.data['articles'];
@@ -45,10 +48,10 @@ class ExploreController extends GetxController {
           hasReachedMax(fetchedArticles.length < 10);
         }
       } else {
-        Get.snackbar('Error', 'Failed to load news');
+        // Get.snackbar('Error', 'Failed to load news');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load news: $e');
+      // Get.snackbar('Error', 'Failed to load news: $e');
     } finally {
       isLoading(false);
       isFetchingMore(false);

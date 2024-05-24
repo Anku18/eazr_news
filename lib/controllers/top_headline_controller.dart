@@ -8,15 +8,17 @@ class TopHeadlineController extends GetxController {
   var topHeadlineList = <ArticleModel>[].obs;
   var dio = Dio();
 
- 
   void fetchNews() async {
     try {
-      var response = await dio.get(baseUrl, queryParameters: {
-        "apiKey": newsApiKey,
-        "sources": 'abc-news',
-        "page": 0,
-        "pageSize": 5,
-      });
+      var response = await dio.get(baseUrl,
+          options: Options(headers: {
+            "X-Api-Key": newsApiKey,
+          }),
+          queryParameters: {
+            "sources": 'abc-news',
+            "page": 0,
+            "pageSize": 5,
+          });
       if (response.statusCode == 200) {
         final List<dynamic> fetchedArticlesJson = response.data['articles'];
         final List<ArticleModel> fetchedArticles = fetchedArticlesJson
